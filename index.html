@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundo da Aprendizagem - Para Crianças de 5 Anos</title>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: "Comic Sans MS", "Chalkboard SE", sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #e3f2fd, #f3e5f5, #e8f5e8);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    touch-action: manipulation;
+  }
+  
+  .header {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+    padding: 15px;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .header h1 {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-size: 2.2em;
+    margin: 0;
+  }
+  
+  .header::before {
+    content: "🎨🔢🔤🐾";
+    font-size: 1.5em;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .instrucoes-audio {
+    background: #fff9c4;
+    padding: 8px;
+    border-radius: 10px;
+    margin: 10px auto;
+    font-size: 14px;
+    color: #e65100;
+    max-width: 300px;
+    border: 2px dashed #ff9800;
+  }
+  
+  .menu-superior {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    background: white;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .menu-btn {
+    background: linear-gradient(135deg, #64b5f6, #42a5f5);
+    border: none;
+    border-radius: 20px;
+    padding: 12px 18px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    min-width: 100px;
+  }
+  
+  .menu-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  
+  .menu-btn.ativo {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    transform: scale(1.05);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .categoria {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .categoria.ativa {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  
+  .item {
+    background: linear-gradient(135deg, #ffd54f, #ffb300);
+    border-radius: 15px;
+    padding: 20px 10px;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    -webkit-tap-highlight-color: transparent;
+    border: 3px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+  }
+  
+  .item:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-color: #ff6b6b;
+  }
+  
+  .item.selecionado {
+    background: linear-gradient(135deg, #81c784, #66bb6a);
+    transform: scale(1.08);
+    border-color: #4caf50;
+    color: white;
+  }
+  
+  .conteudo-area {
+    margin-top: 25px;
+    padding: 25px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #e3f2fd;
+  }
+  
+  .placeholder-texto {
+    color: #666;
+    font-size: 1.2em;
+  }
+  
+  .imagem-grande {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 4px solid #ffd54f;
+  }
+  
+  .botoes-audio {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  
+  .btn-audio {
+    background: linear-gradient(135deg, #81c784, #66bb6a);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .btn-audio:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+  }
+  
+  .silabas-instrucao {
+    margin: 15px 0; 
+    color: #666;
+  }
+  
+  .silabas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+    padding: 15px;
+    background: #f3e5f5;
+    border-radius: 15px;
+    max-width: 400px;
+  }
+  
+  .silaba {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .silaba:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #bbdefb, #90caf9);
+  }
+  
+  .contador-visual {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  
+  .ponto {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border-radius: 50%;
+    animation: popIn 0.5s ease;
+  }
+  
+  @keyframes popIn {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  .cor-bloco {
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+    margin: 15px auto;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    border: 4px solid white;
+  }
+  
+  .animal-img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 15px;
+    margin: 10px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .fruta-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 15px;
+    margin: 10px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .forma-img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin: 10px 0;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  }
+  
+  .emoji {
+    font-size: 2em;
+    margin-bottom: 8px;
+  }
+  
+  .subtitulo {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+  }
+  
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      gap: 10px;
+    }
+    
+    .item {
+      padding: 15px 8px;
+      min-height: 85px;
+      font-size: 24px;
+    }
+    
+    .menu-btn {
+      padding: 10px 15px;
+      font-size: 14px;
+      min-width: 85px;
+    }
+    
+    .imagem-grande {
+      width: 150px;
+      height: 150px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Mundo da Aprendizagem</h1>
+</div>
+
+<div class="instrucoes-audio">
+  🎵 Toque em qualquer botão para ativar os sons!
+</div>
+
+<div class="menu-superior">
+  <button class="menu-btn ativo" data-categoria="letras">🔤 Letras</button>
+  <button class="menu-btn" data-categoria="numeros">🔢 Números</button>
+  <button class="menu-btn" data-categoria="cores">🎨 Cores</button>
+  <button class="menu-btn" data-categoria="animais">🐾 Animais</button>
+  <button class="menu-btn" data-categoria="frutas">🍎 Frutas</button>
+  <button class="menu-btn" data-categoria="formas">⭐ Formas</button>
+</div>
+
+<div class="container">
+  <div id="letras" class="categoria ativa">
+    <div class="grid" id="grid-letras"></div>
+    <div class="conteudo-area" id="conteudo-letras">
+      <div class="placeholder-texto">Clique em uma letra para começar!</div>
+    </div>
+  </div>
+
+  <div id="numeros" class="categoria">
+    <div class="grid" id="grid-numeros"></div>
+    <div class="conteudo-area" id="conteudo-numeros">
+      <div class="placeholder-texto">Clique em um número para começar!</div>
+    </div>
+  </div>
+
+  <div id="cores" class="categoria">
+    <div class="grid" id="grid-cores"></div>
+    <div class="conteudo-area" id="conteudo-cores">
+      <div class="placeholder-texto">Clique em uma cor para começar!</div>
+    </div>
+  </div>
+
+  <div id="animais" class="categoria">
+    <div class="grid" id="grid-animais"></div>
+    <div class="conteudo-area" id="conteudo-animais">
+      <div class="placeholder-texto">Clique em um animal para começar!</div>
+    </div>
+  </div>
+
+  <div id="frutas" class="categoria">
+    <div class="grid" id="grid-frutas"></div>
+    <div class="conteudo-area" id="conteudo-frutas">
+      <div class="placeholder-texto">Clique em uma fruta para começar!</div>
+    </div>
+  </div>
+
+  <div id="formas" class="categoria">
+    <div class="grid" id="grid-formas"></div>
+    <div class="conteudo-area" id="conteudo-formas">
+      <div class="placeholder-texto">Clique em uma forma para começar!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let audioAtivado = false;
+
+// Função utilitária: Remove acentos e retorna TUDO em MAIÚSCULAS (para exibição)
+function cleanAndCapitalize(text) {
+    if (!text) return '';
+    // 1. Remove acentos
+    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // 2. Retorna TUDO em MAIÚSCULAS
+    return text.toUpperCase();
+}
+
+// Função para tocar arquivos de áudio locais com fallback para TTS
+function tocarSomReal(caminhoDoAudio, onomatopeiaFonetic) {
+  if (!audioAtivado) {
+    ativarAudio();
+  }
+  
+  if (caminhoDoAudio) {
+    // Parar fala do TTS, se houver
+    speechSynthesis.cancel(); 
+    const audio = new Audio(caminhoDoAudio);
+    
+    // Tenta tocar o áudio. Se falhar (arquivo não encontrado), usa o TTS.
+    audio.play().catch(e => {
+        console.warn("Erro ao tentar tocar o áudio real (verifique o caminho), usando TTS como fallback:", e);
+        falar(onomatopeiaFonetic);
+    });
+  } else {
+    // Caso o path esteja nulo por algum motivo
+    falar(onomatopeiaFonetic);
+  }
+}
+
+
+// Função para ativar áudio (Garantir que TTS funcione após o primeiro clique)
+function ativarAudio() {
+  if (!audioAtivado) {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(1, audioContext.currentTime);
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.001);
+    
+    audioAtivado = true;
+    document.querySelector('.instrucoes-audio').style.display = 'none';
+    falar("Vamos aprender!");
+  }
+}
+
+const voz = new SpeechSynthesisUtterance();
+voz.lang = "pt-BR"; // Confirma o idioma Português do Brasil
+voz.rate = 0.8;
+voz.pitch = 1.1;
+
+function falar(texto) {
+  if (!audioAtivado) {
+    ativarAudio();
+    return;
+  }
+  speechSynthesis.cancel();
+  voz.text = texto;
+  speechSynthesis.speak(voz);
+}
+
+// ======== DADOS (AJUSTADOS) ========
+const dados = {
+  letras: {
+    A: { palavra: "Abacaxi", img: "🍍", cor: "#FFD700" },
+    B: { palavra: "Bola", img: "⚽", cor: "#FF6B6B" },
+    C: { palavra: "Cachorro", img: "🐶", cor: "#8B4513" },
+    D: { palavra: "Dado", img: "🎲", cor: "#FF1493" },
+    E: { palavra: "Escola", img: "🏫", cor: "#A9A9A9" }, 
+    F: { palavra: "Flor", img: "🌺", cor: "#FF69B4" },
+    G: { palavra: "Gato", img: "🐱", cor: "#FFA500" },
+    H: { palavra: "Helicóptero", img: "🚁", cor: "#1E90FF" },
+    I: { palavra: "Igreja", img: "⛪", cor: "#D3D3D3" },
+    J: { palavra: "Janela", img: "🪟", cor: "#87CEEB" },
+    K: { palavra: "Koala", img: "🐨", cor: "#A0522D" },
+    L: { palavra: "Leão", img: "🦁", cor: "#FFD700" },
+    M: { palavra: "Macaco", img: "🐵", cor: "#8B4513" },
+    N: { palavra: "Nuvem", img: "☁️", cor: "#FFFFFF" },
+    O: { palavra: "Ovo", img: "🥚", cor: "#F5F5F5" }, 
+    P: { palavra: "Pato", img: "🦆", cor: "#FFD700" },
+    Q: { palavra: "Queijo", img: "🧀", cor: "#FFD700" },
+    R: { palavra: "Rato", img: "🐭", cor: "#A0522D" }, 
+    S: { palavra: "Sol", img: "☀️", cor: "#FFD700" },
+    T: { palavra: "Tartaruga", img: "🐢", cor: "#32CD32" },
+    U: { palavra: "Uva", img: "🍇", cor: "#9370DB" },
+    V: { palavra: "Vaca", img: "🐮", cor: "#FFFFFF" },
+    W: { palavra: "Watermelon", img: "🍉", cor: "#FF0000" },
+    X: { palavra: "Xícara", img: "☕", cor: "#8B4513" },
+    Y: { palavra: "Yoga", img: "🧘", cor: "#9370DB" },
+    Z: { palavra: "Zebra", img: "🦓", cor: "#000000" }
+  },
+
+  numeros: {
+    1: { palavra: "Um", img: "1️⃣", cor: "#FF6B6B" },
+    2: { palavra: "Dois", img: "2️⃣", cor: "#4ECDC4" },
+    3: { palavra: "Três", img: "3️⃣", cor: "#45B7D1" },
+    4: { palavra: "Quatro", img: "4️⃣", cor: "#96CEB4" },
+    5: { palavra: "Cinco", img: "5️⃣", cor: "#FFEAA7" },
+    6: { palavra: "Seis", img: "6️⃣", cor: "#DDA0DD" },
+    7: { palavra: "Sete", img: "7️⃣", cor: "#98D8C8" },
+    8: { palavra: "Oito", img: "8️⃣", cor: "#F7DC6F" },
+    9: { palavra: "Nove", img: "9️⃣", cor: "#BB8FCE" },
+    10: { palavra: "Dez", img: "🔟", cor: "#85C1E9" }
+  },
+  
+  cores: {
+    "Vermelho": { cor: "#FF0000", img: "🔴" },
+    "Azul": { cor: "#0000FF", img: "🔵" },
+    "Verde": { cor: "#00FF00", img: "🟢" },
+    "Amarelo": { cor: "#FFFF00", img: "🟡" },
+    "Rosa": { cor: "#FF69B4", img: "💖" },
+    "Roxo": { cor: "#800080", img: "🟣" },
+    "Laranja": { cor: "#FFA500", img: "🟠" },
+    "Marrom": { cor: "#8B4513", img: "🟤" },
+    "Preto": { cor: "#000000", img: "⚫" },
+    "Branco": { cor: "#FFFFFF", img: "⚪" }
+  },
+
+  animais: {
+    "Cachorro": { img: "🐶", som: "Au Au", som_fonetico: "Áu áu", som_mp3: "audios/cachorro.mp3" },
+    "Gato": { img: "🐱", som: "Miau", som_fonetico: "Miáu", som_mp3: "audios/gato.mp3" },
+    "Vaca": { img: "🐮", som: "Muuuú", som_fonetico: "Múúúúú", som_mp3: "audios/vaca.mp3" },
+    "Galinha": { img: "🐔", som: "Cocoricó", som_fonetico: "cócoricó", som_mp3: "audios/galinha.mp3" }, 
+    "Pato": { img: "🦆", som: "Quá Quá", som_fonetico: "quá quá", som_mp3: "audios/pato.mp3" },
+    "Leão": { img: "🦁", som: "Rugido", som_fonetico: "Rúgido Rúgido", som_mp3: "audios/leao.mp3" },
+    "Elefante": { img: "🐘", som: "Trombeta", som_fonetico: "trombeta", som_mp3: "audios/elefante.mp3" },
+    "Macaco": { img: "🐵", som: "U U Á Á", som_fonetico: "ú ú á á", som_mp3: "audios/macaco.mp3" },
+    "Pássaro": { img: "🐦", som: "Piu Piu", som_fonetico: "píu píu", som_mp3: "audios/passaro.mp3" },
+    "Ovelha": { img: "🐑", som: "Meeeeé", som_fonetico: "Mé Mé", som_mp3: "audios/ovelha.mp3" } // Caminho alterado para "audios/"
+  },
+
+  frutas: {
+    "Maçã": { img: "🍎", cor: "#FF0000" },
+    "Banana": { img: "🍌", cor: "#FFD700" },
+    "Uva": { img: "🍇", cor: "#9370DB" },
+    "Laranja": { img: "🍊", cor: "#FFA500" },
+    "Morango": { img: "🍓", cor: "#FF0000" },
+    "Abacaxi": { img: "🍍", cor: "#FFD700" },
+    "Melancia": { img: "🍉", cor: "#FF0000" },
+    "Pera": { img: "🍐", cor: "#32CD32" },
+    "Cereja": { img: "🍒", cor: "#FF0000" },
+    "Limão": { img: "🍋", cor: "#FFFF00" }
+  },
+
+  formas: {
+    "Círculo": { img: "⭕", lados: "0" },
+    "Quadrado": { img: "⬛", lados: "4" },
+    "Triângulo": { img: "🔺", lados: "3" },
+    "Estrela": { img: "⭐", lados: "5" },
+    "Coração": { img: "❤️", lados: "0" },
+    "Retângulo": { img: "📏", lados: "4" },
+    "Losango": { img: "💠", lados: "4" },
+    "Pentágono": { img: "⬟", lados: "5" },
+    "Hexágono": { img: "⬢", lados: "6" },
+    "Lua": { img: "🌙", lados: "0" }
+  }
+};
+
+// SÍLABAS (mantidas)
+const silabas = {
+  // VOGAIS: Usando acento agudo para forçar pronúncia clara do TTS
+  A: ["á"],
+  E: ["é"],
+  I: ["í"],
+  O: ["ó"], 
+  U: ["ú"],
+
+  // CONSOANTES
+  B: ["bá", "bé", "bí", "bó", "bú"],
+  C: ["cá", "cé", "cí", "có", "cú"],
+  D: ["dá", "dé", "dí", "dó", "dú"],
+  F: ["fá", "fé", "fí", "fó", "fú"],
+  G: ["gá", "gué", "guí", "gó", "gú"], 
+  H: ["á", "é", "í", "ó", "ú"], 
+  J: ["já", "jé", "jí", "jó", "jú"],
+  K: ["ká", "ké", "kí", "kó", "kú"],
+  L: ["lá", "lé", "lí", "ló", "lú"],
+  M: ["má", "mé", "mí", "mó", "mú"],
+  N: ["ná", "né", "ní", "nó", "nú"],
+  P: ["pá", "pé", "pí", "pó", "pú"],
+  Q: ["quá", "qué", "quí", "quó"], 
+  R: ["rá", "ré", "rí", "ró", "rú"],
+  S: ["sá", "sé", "sí", "só", "sú"],
+  T: ["tá", "té", "tí", "tó", "tú"],
+  V: ["vá", "vé", "ví", "vó", "vú"],
+  W: ["wá", "wé", "wí", "wó", "wú"],
+  X: ["xá", "xé", "xí", "xó", "xú"],
+  Y: ["yá", "yé", "yí", "yó", "yú"],
+  Z: ["zá", "zé", "zí", "zó", "zú"]
+};
+
+// ======== INICIALIZAÇÃO E SELEÇÃO (mantidas) ========
+function inicializarCategoria(categoria, dadosCategoria) {
+  const grid = document.getElementById(`grid-${categoria}`);
+  
+  grid.innerHTML = '';
+  
+  Object.keys(dadosCategoria).forEach(chave => {
+    const item = document.createElement('div');
+    item.className = 'item';
+    
+    const dadosItem = dadosCategoria[chave];
+    
+    // Cor de contraste para o texto
+    const corTexto = ['Preto', 'Marrom', 'Roxo'].includes(chave) || categoria === 'letras' || categoria === 'numeros' ? 'white' : '#333';
+    
+    if (categoria === 'cores') {
+      item.style.background = dadosItem.cor;
+      item.style.color = corTexto; 
+    } else {
+      item.style.background = dadosItem.cor || `hsl(${Math.random() * 360}, 70%, 80%)`;
+      if (categoria === 'letras' || categoria === 'numeros') {
+           item.style.color = '#333'; 
+      }
+    }
+    
+    item.innerHTML = `
+      <div class="emoji">${dadosItem.img}</div>
+      <div>${chave}</div>
+      ${dadosItem.subtitulo ? `<div class="subtitulo">${dadosItem.subtitulo}</div>` : ''}
+    `;
+    
+    item.onclick = () => {
+      ativarAudio();
+      selecionarItem(categoria, chave, item);
+    };
+    
+    grid.appendChild(item);
+  });
+}
+
+function selecionarItem(categoria, chave, elemento) {
+  // Remover seleção anterior
+  document.querySelectorAll(`#grid-${categoria} .item`).forEach(item => {
+    item.classList.remove('selecionado');
+  });
+  
+  // Adicionar seleção atual
+  elemento.classList.add('selecionado');
+  
+  const dadosItem = dados[categoria][chave];
+  const conteudo = document.getElementById(`conteudo-${categoria}`);
+  
+  switch(categoria) {
+    case 'letras':
+      mostrarLetra(chave, dadosItem, conteudo);
+      break;
+    case 'numeros':
+      mostrarNumero(chave, dadosItem, conteudo);
+      break;
+    case 'cores':
+      mostrarCor(chave, dadosItem, conteudo);
+      break;
+    case 'animais':
+      mostrarAnimal(chave, dadosItem, conteudo);
+      break;
+    case 'frutas':
+      mostrarFruta(chave, dadosItem, conteudo);
+      break;
+    case 'formas':
+      mostrarForma(chave, dadosItem, conteudo);
+      break;
+  }
+}
+
+// ======== FUNÇÕES DE EXIBIÇÃO (mantidas as correções anteriores) ========
+function mostrarLetra(letra, info, conteudo) {
+  const listaSilabasFonetica = silabas[letra] || [];
+  
+  // Extrai a pronúncia acentuada ('á', 'ó', 'ú') para garantir leitura correta.
+  let letraFonetica = letra;
+  if (listaSilabasFonetica.length > 0 && ['A', 'E', 'I', 'O', 'U'].includes(letra)) {
+    letraFonetica = listaSilabasFonetica[0];
+  }
+  
+  // Passa 'A letra ' + letraFonetica para dar contexto ao TTS e evitar a falha de leitura.
+  const fraseLetraCompleta = 'letra ' + letraFonetica; 
+
+  conteudo.innerHTML = `
+    <h2 style="font-size: 3em; color: ${info.cor};">${letra}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    <h3>${letra} de ${info.palavra}</h3>
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${fraseLetraCompleta}')">
+        🔊 Letra ${letra}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); falar('${info.palavra}')">
+        🔊 ${info.palavra}
+      </button>
+    </div>
+    
+    ${listaSilabasFonetica.length > 0 ? `
+      <div class="silabas-instrucao">
+        Clique nas sílabas para ouvir:
+      </div>
+      <div class="silabas">
+        ${listaSilabasFonetica.map(silabaFonetica => `
+          <div class="silaba" onclick="ativarAudio(); falar('${silabaFonetica}')">
+            ${cleanAndCapitalize(silabaFonetica)}
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+  `;
+  
+  falar(fraseLetraCompleta); 
+}
+
+function mostrarNumero(numero, info, conteudo) {
+  const num = parseInt(numero);
+  let pontos = '';
+  const limiteVisual = 20; 
+  for (let i = 0; i < num && i < limiteVisual; i++) {
+    pontos += '<div class="ponto"></div>';
+  }
+  let avisoLimite = '';
+  if (num > limiteVisual) {
+     avisoLimite = `<div class="placeholder-texto" style="margin-top: 10px;">... e mais ${num - limiteVisual} pontinhos!</div>`;
+  }
+  
+  conteudo.innerHTML = `
+    <h2 style="font-size: 3em; color: ${info.cor};">${numero}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    <h3>Número ${info.palavra}</h3>
+    
+    <div class="contador-visual">
+      ${pontos}
+    </div>
+    ${avisoLimite}
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${numero}')">
+        🔊 Número ${numero}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); falar('${info.palavra}')">
+        🔊 ${info.palavra}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); contarAte(${num})">
+        🔢 Contar até ${num}
+      </button>
+    </div>
+  `;
+  
+  falar(numero);
+}
+
+function mostrarCor(cor, info, conteudo) {
+  conteudo.innerHTML = `
+    <h2 style="color: ${info.cor};">${cor}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    <div class="cor-bloco" style="background: ${info.cor}"></div>
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${cor}')">
+        🔊 Cor ${cor}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); falar('A cor ${cor}')">
+        🔊 Frase Completa
+      </button>
+    </div>
+  `;
+  
+  falar(cor);
+}
+
+function mostrarAnimal(animal, info, conteudo) {
+  // O caminho foi corrigido para "audios/"
+  const acaoSomBotao = `tocarSomReal('${info.som_mp3}', '${info.som_fonetico}')`; 
+  
+  conteudo.innerHTML = `
+    <h2>${animal}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${animal}')">
+        🔊 ${animal}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); ${acaoSomBotao}">
+        🔊 Som: ${info.som}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); falar('eu gosto de ${animal}')">
+        🔊 Frase Completa
+      </button>
+    </div>
+  `;
+  
+  falar(animal);
+}
+
+function mostrarFruta(fruta, info, conteudo) {
+  conteudo.innerHTML = `
+    <h2 style="color: ${info.cor};">${fruta}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${fruta}')">
+        🔊 ${fruta}
+      </button>
+      <button class="btn-audio" onclick="ativarAudio(); falar('Eu gosto de ${fruta}')">
+        🔊 Frase Completa
+      </button>
+    </div>
+  `;
+  
+  falar(fruta);
+}
+
+function mostrarForma(forma, info, conteudo) {
+  const ladosTexto = info.lados === "0" ? "não tem lados" : `tem ${info.lados} lados`;
+  
+  conteudo.innerHTML = `
+    <h2>${forma}</h2>
+    <div class="emoji" style="font-size: 4em;">${info.img}</div>
+    ${info.lados !== "0" ? `<h3>${ladosTexto}</h3>` : ''}
+    
+    <div class="botoes-audio">
+      <button class="btn-audio" onclick="ativarAudio(); falar('${forma}')">
+        🔊 ${forma}
+      </button>
+          </div>
+  `;
+  
+  falar(forma);
+}
+
+function contarAte(n) {
+  let i = 1;
+  function contar() {
+    if (i <= n) {
+      falar(i.toString());
+      i++;
+      setTimeout(contar, 1200);
+    }
+  }
+  contar();
+}
+
+// ======== MENU (mantidas) ========
+document.querySelectorAll('.menu-btn').forEach(botao => {
+  botao.addEventListener('click', function() {
+    const categoria = this.dataset.categoria;
+    
+    // Atualizar menu
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('ativo'));
+    this.classList.add('ativo');
+    
+    // Atualizar categorias
+    document.querySelectorAll('.categoria').forEach(cat => cat.classList.remove('ativa'));
+    document.getElementById(categoria).classList.add('ativa');
+    
+    // Selecionar primeiro item da categoria
+    const primeiroItem = document.querySelector(`#grid-${categoria} .item`);
+    if (primeiroItem) {
+      primeiroItem.click();
+    }
+  });
+});
+
+// ======== INICIALIZAR TUDO (mantidas) ========
+window.onload = function() {
+  // Inicializar todas as categorias
+  Object.keys(dados).forEach(categoria => {
+    inicializarCategoria(categoria, dados[categoria]);
+  });
+  
+  // Selecionar primeiro item da primeira categoria
+  const primeiroItem = document.querySelector('#grid-letras .item');
+  if (primeiroItem) {
+    primeiroItem.click();
+  }
+};
+</script>
+</body>
+</html>
